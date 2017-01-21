@@ -1,6 +1,7 @@
 /*
 * DisplayNode.cpp
-* Homie Node for SSD1306 OLED displays using ESP8266_SSD1306 display driver library.
+* Homie Node for SSD1306 OLED displays using ESP8266_SSD1306 display driver
+* library.
 *
 * Version: 1.0
 * Author: Markus Haack (http://github.com/mhaack)
@@ -15,28 +16,23 @@
 
 HomieEvent homieEvent;
 
-DisplayNode::DisplayNode(SSD1306Wire& display, OLEDDisplayUi& ui) : HomieNode("OLEDDisplay", "display"),
-display(display), ui(ui), statusEnabled(false) {}
+DisplayNode::DisplayNode(SSD1306Wire &display, OLEDDisplayUi &ui,
+                         NTPClient &timeClient)
+    : HomieNode("OLEDDisplay", "display"), display(display), ui(ui),
+      timeClient(timeClient), statusEnabled(false) {}
 
 void DisplayNode::setup() {
-  ui.setTargetFPS(30);
 
-  // Customize the active and inactive symbol
+  // init dispaly
+  ui.setTargetFPS(60);
   ui.setActiveSymbol(emptySymbol);
   ui.setInactiveSymbol(emptySymbol);
   ui.disableIndicator();
+  ui.setIndicatorPosition(BOTTOM);
 
   ui.getUiState()->userData = this;
 
-  // You can change this to
-  // TOP, LEFT, BOTTOM, RIGHT
-  ui.setIndicatorPosition(BOTTOM);
-
-  // Defines where the first frame is located in the bar.
   ui.setIndicatorDirection(LEFT_RIGHT);
-
-  // You can change the transition that is used
-  // SLIDE_LEFT, SLIDE_RIGHT, SLIDE_UP, SLIDE_DOWN
   ui.setFrameAnimation(SLIDE_LEFT);
 
   // Add frames
@@ -47,8 +43,8 @@ void DisplayNode::setup() {
   ui.setFrames(frames, frameCount);
 
   // Add overlays
-  static OverlayCallback overlays[] = { DisplayNode::drawOverlay };
-  static int overlaysCount       = 1;
+  static OverlayCallback overlays[] = {DisplayNode::drawOverlay};
+  static uint8_t overlaysCount = 1;
   ui.setOverlays(overlays, overlaysCount);
 
   // Initialising the UI will init the display too.
@@ -56,22 +52,21 @@ void DisplayNode::setup() {
 
   display.flipScreenVertically();
 
-  LN.log("DisplayNode::setup()", LoggerNode::DEBUG, "OLED DisplayNode setup successfull!");
+  LN.log("DisplayNode::setup()", LoggerNode::DEBUG,
+         "OLED DisplayNode setup successfull!");
 }
 
-void DisplayNode::loop() {
-  ui.update();
-}
+void DisplayNode::loop() { ui.update(); }
 
 void DisplayNode::addFrame(FrameCallback frame, uint8_t index) {
   frames[index] = frame;
 }
 
-void DisplayNode::Event(HomieEvent event) {
-  homieEvent = event;
-}
+void DisplayNode::Event(HomieEvent event) { homieEvent = event; }
 
-void DisplayNode::drawStatusFrame(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y) {
+void DisplayNode::drawStatusFrame(OLEDDisplay *display,
+                                  OLEDDisplayUiState *state, int16_t x,
+                                  int16_t y) {
   if ((state == NULL) || (state->userData == NULL)) {
     return;
   }
@@ -83,45 +78,58 @@ void DisplayNode::drawStatusFrame(OLEDDisplay *display, OLEDDisplayUiState* stat
     display->drawString(64 + x, 0 + y, "System Status");
 
     display->setTextAlignment(TEXT_ALIGN_LEFT);
-    display->drawString(0 + x, 10 + y, "IP: " + homieEvent.ip.toString());
+    display->drawString(0 + x, 13 + y, "IP: " + homieEvent.ip.toString());
 
     String last_status = "unknown";
     switch (homieEvent.type) {
-      case HomieEventType::CONFIGURATION_MODE:
+    case HomieEventType::CONFIGURATION_MODE:
       last_status = "Configuration mode started";
       break;
-      case HomieEventType::NORMAL_MODE:
+    case HomieEventType::NORMAL_MODE:
       last_status = "Normal mode started";
       break;
-      case HomieEventType::OTA_STARTED:
+    case HomieEventType::OTA_STARTED:
       last_status = "OTA started";
       break;
-      case HomieEventType::OTA_FAILED:
+    case HomieEventType::OTA_FAILED:
       last_status = "OTA failed";
       break;
-      case HomieEventType::OTA_SUCCESSFUL:
+    case HomieEventType::OTA_SUCCESSFUL:
       last_status = "OTA successful";
       break;
-      case HomieEventType::ABOUT_TO_RESET:
+    case HomieEventType::ABOUT_TO_RESET:
       last_status = "About to reset";
       break;
-      case HomieEventType::WIFI_CONNECTED:
+    case HomieEventType::WIFI_CONNECTED:
       last_status = "Wi-Fi connected";
       break;
-      case HomieEventType::WIFI_DISCONNECTED:
+    case HomieEventType::WIFI_DISCONNECTED:
       last_status = "Wi-Fi disconnected";
       break;
-      case HomieEventType::MQTT_CONNECTED:
+    case HomieEventType::MQTT_CONNECTED:
       last_status = "MQTT connected";
       break;
-      case HomieEventType::MQTT_DISCONNECTED:
+    case HomieEventType::MQTT_DISCONNECTED:
       last_status = "MQTT disconnected";
       break;
-      case HomieEventType::MQTT_PACKET_ACKNOWLEDGED:
+    case HomieEventType::MQTT_PACKET_ACKNOWLEDGED:
       last_status = "MQTT package acknowledged";
       break;
     }
-    display->drawStringMaxWidth(0 + x, 20 + y, 128, "Status: " + last_status);
+    display->drawStringMaxWidth(0 + x, 24 + y, 128, "Status: " + last_status);
+  }
+}
+
+// converts the dBm to a range between 0 and 100%
+static int8_t getWifiQuality() {
+  int32_t dbm = WiFi.RSSI();
+
+  if (dbm <= -100) {
+    return 0;
+  } else if (dbm >= -50) {
+    return 100;
+  } else {
+    return 2 * (dbm + 100);
   }
 }
 
@@ -136,23 +144,22 @@ void DisplayNode::drawOverlay(OLEDDisplay *display, OLEDDisplayUiState *state) {
     display->setFont(ArialMT_Plain_10);
     display->setTextAlignment(TEXT_ALIGN_LEFT);
     display->drawString(0, 54,
-      String(state->currentFrame + 1) + "/" +
-      String(self->frameCount));
+                        String(state->currentFrame + 1) + "/" +
+                            String(self->frameCount));
 
-      // String time;
-      // self->timeClient.getFormattedTime(time);
-      // time = time.substring(0, 5);
-      // display->setTextAlignment(TEXT_ALIGN_CENTER);
-      // display->drawString(38, 54, time);
+    String time = self->timeClient.getFormattedTime();
+    display->setTextAlignment(TEXT_ALIGN_CENTER);
+    display->drawString(64, 54, time);
 
-      for (int8_t i = 0; i < 4; i++) {
-        for (int8_t j = 0; j < 2 * (i + 1); j++) {
-          if ((self->wifiQuality > i * 25) || (j == 0)) {
-            display->setPixel(120 + 2 * i, 63 - j);
-          }
+    int8_t wifiQuality = getWifiQuality();
+    for (int8_t i = 0; i < 4; i++) {
+      for (int8_t j = 0; j < 2 * (i + 1); j++) {
+        if ((wifiQuality > i * 25) || (j == 0)) {
+          display->setPixel(120 + 2 * i, 63 - j);
         }
       }
-
-      display->drawHorizontalLine(0, 52, 128);
     }
+    display->drawHorizontalLine(0, 13, 128);
+    display->drawHorizontalLine(0, 52, 128);
   }
+}
