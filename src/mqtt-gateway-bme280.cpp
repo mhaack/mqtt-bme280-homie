@@ -65,10 +65,12 @@ void drawTempFrame(OLEDDisplay *display, OLEDDisplayUiState *state, int16_t x,
   display->setFont(ArialMT_Plain_10);
   display->setTextAlignment(TEXT_ALIGN_CENTER);
   display->drawString(x + 64, y + 0, "Temperature");
-  display->setFont(ArialMT_Plain_16);
+  display->drawXbm(x + 5, y + 18, temp_icon_width, temp_icon_height,
+                   temp_icon_bits);
+  display->setFont(ArialMT_Plain_24);
   display->setTextAlignment(TEXT_ALIGN_LEFT);
-  display->drawString(x + 0, y + 31,
-                      String(bme280Node.getTemperature(), 1) + "°C");
+  display->drawString(x + 42, y + 20,
+                      String(bme280Node.getTemperature(), 1) + " °C");
 }
 
 void drawHumidityFrame(OLEDDisplay *display, OLEDDisplayUiState *state,
@@ -76,9 +78,12 @@ void drawHumidityFrame(OLEDDisplay *display, OLEDDisplayUiState *state,
   display->setFont(ArialMT_Plain_10);
   display->setTextAlignment(TEXT_ALIGN_CENTER);
   display->drawString(x + 64, y + 0, "Humidity");
-  display->setFont(ArialMT_Plain_16);
+  display->drawXbm(x + 5, y + 18, humidity_width, humidity_height,
+                   humidity_bits);
+  display->setFont(ArialMT_Plain_24);
   display->setTextAlignment(TEXT_ALIGN_LEFT);
-  display->drawString(x + 0, y + 31, String(bme280Node.getHumidity(), 0) + "%");
+  display->drawString(x + 55, y + 20,
+                      String(bme280Node.getHumidity(), 0) + " %");
 }
 
 void drawPressureFrame(OLEDDisplay *display, OLEDDisplayUiState *state,
@@ -86,10 +91,12 @@ void drawPressureFrame(OLEDDisplay *display, OLEDDisplayUiState *state,
   display->setFont(ArialMT_Plain_10);
   display->setTextAlignment(TEXT_ALIGN_CENTER);
   display->drawString(x + 64, y + 0, "Pressure");
+  display->drawXbm(x + 5, y + 18, pressure_width, pressure_height,
+                   pressure_bits);
   display->setFont(ArialMT_Plain_16);
   display->setTextAlignment(TEXT_ALIGN_LEFT);
-  display->drawString(x + 0, y + 31,
-                      String(bme280Node.getPressure(), 0) + "hPa");
+  display->drawString(x + 50, y + 25,
+                      String(bme280Node.getPressure(), 0) + " hPa");
 }
 
 void drawMQTTFrame(OLEDDisplay *display, OLEDDisplayUiState *state, int16_t x,
