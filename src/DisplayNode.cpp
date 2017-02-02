@@ -8,7 +8,6 @@
 */
 
 #include "DisplayNode.h"
-#include "LoggerNode.h"
 #include "images.h"
 
 #include <ESP8266WiFi.h>
@@ -52,8 +51,7 @@ void DisplayNode::setup() {
 
   display.flipScreenVertically();
 
-  LN.log("DisplayNode::setup()", LoggerNode::DEBUG,
-         "OLED DisplayNode setup successfull!");
+  Homie.getLogger() << "OLED DisplayNode setup successfull!" << endl;
 }
 
 void DisplayNode::loop() { ui.update(); }

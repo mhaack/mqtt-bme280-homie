@@ -13,7 +13,6 @@
 
 #include "BME280Node.h"
 #include "DisplayNode.h"
-#include "LoggerNode.h"
 #include "images.h"
 
 WiFiUDP ntpUDP;
@@ -47,7 +46,6 @@ void setup() {
   Homie.setLoopFunction(loopHandler);
   Homie.onEvent([](HomieEvent event) { displayNode.Event(event); });
 
-  LN.setLoglevel(LoggerNode::DEBUG);
   displayNode.addFrame(drawTempFrame, 0);
   displayNode.addFrame(drawHumidityFrame, 1);
   displayNode.addFrame(drawPressureFrame, 2);
