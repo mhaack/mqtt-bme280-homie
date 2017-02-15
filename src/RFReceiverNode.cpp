@@ -11,7 +11,7 @@
 // homie settings
 HomieSetting<const char *>
     channelMappingSetting("channels",
-                          "Mapping of 433MHz signals to mqtt channel.");
+                          "Mapping of 433MHz signals to mqtt channels.");
 
 RFReceiverNode::RFReceiverNode(const char *name)
     : HomieNode(name, "RFReceiver") {
