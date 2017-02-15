@@ -13,12 +13,14 @@
 
 #include "BME280Node.h"
 #include "DisplayNode.h"
+#include "RFReceiverNode.h"
 #include "images.h"
 
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
 
 BME280Node bme280Node("bme280Outdoor");
+RFReceiverNode rfReceiverNode("rfRxOutdoor");
 SSD1306Wire display(0x3c, D2, D1);
 OLEDDisplayUi ui(&display);
 DisplayNode displayNode("displayOutdoor", display, ui, timeClient);
