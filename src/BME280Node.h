@@ -23,15 +23,15 @@ private:
   Adafruit_BME280 bme;
 
 public:
-  BME280Node();
-  virtual void setup() override;
-  virtual void loop() override;
+  BME280Node(const char *name);
 
   float getHumidity() const { return humidity; }
-
   float getTemperature() const { return temperature; }
-
   float getPressure() const { return pressure; }
+
+protected:
+  virtual void setup() override;
+  virtual void loop() override;
 
 private:
   float temperature = NAN;

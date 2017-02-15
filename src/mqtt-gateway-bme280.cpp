@@ -18,10 +18,10 @@
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
 
-BME280Node bme280Node;
+BME280Node bme280Node("bme280Outdoor");
 SSD1306Wire display(0x3c, D2, D1);
 OLEDDisplayUi ui(&display);
-DisplayNode displayNode(display, ui, timeClient);
+DisplayNode displayNode("displayOutdoor", display, ui, timeClient);
 
 // declaring method prototypes
 void drawTempFrame(OLEDDisplay *display, OLEDDisplayUiState *state, int16_t x,

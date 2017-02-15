@@ -17,14 +17,17 @@
 
 class DisplayNode : public HomieNode {
 public:
-  DisplayNode(SSD1306Wire &display, OLEDDisplayUi &ui, NTPClient &timeClient);
-  void setup();
-  void loop();
+  DisplayNode(const char *name, SSD1306Wire &display, OLEDDisplayUi &ui,
+              NTPClient &timeClient);
 
   void addFrame(FrameCallback frame, uint8_t index);
   void setFrameCount(uint8_t count) { frameCount = count; }
   void enableStatusFrame(bool enabled) { statusEnabled = enabled; }
   void Event(HomieEvent event);
+
+protected:
+  virtual void setup() override;
+  virtual void loop() override;
 
 private:
   SSD1306Wire display;

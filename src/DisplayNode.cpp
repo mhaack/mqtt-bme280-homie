@@ -15,9 +15,9 @@
 
 HomieEvent homieEvent;
 
-DisplayNode::DisplayNode(SSD1306Wire &display, OLEDDisplayUi &ui,
-                         NTPClient &timeClient)
-    : HomieNode("OLEDDisplay", "display"), display(display), ui(ui),
+DisplayNode::DisplayNode(const char *name, SSD1306Wire &display,
+                         OLEDDisplayUi &ui, NTPClient &timeClient)
+    : HomieNode(name, "OLEDDisplay"), display(display), ui(ui),
       timeClient(timeClient), statusEnabled(false) {}
 
 void DisplayNode::setup() {

@@ -16,8 +16,8 @@ HomieSetting<double>
     temperatureOffsetSetting("temperatureOffset",
                              "The temperature offset in degrees");
 
-BME280Node::BME280Node()
-    : HomieNode("BME280Sensor", "bme280"), lastMeasurement(0) {
+BME280Node::BME280Node(const char *name)
+    : HomieNode(name, "BME280Sensor"), lastMeasurement(0) {
   advertise("temperature");
   advertise("humidity");
   advertise("pressure");
@@ -30,9 +30,9 @@ void BME280Node::setup() {
     while (1)
       ;
   }
-  Homie.getLogger() << "BME280: sensor reading interval = "
+  Homie.getLogger() << "BME280 sensor reading interval = "
                     << sensorIntervalSetting.get() << endl;
-  Homie.getLogger() << "BME280: temperature offset = "
+  Homie.getLogger() << "BME280 temperature offset = "
                     << temperatureOffsetSetting.get() << endl;
   Homie.getLogger() << "BME280 sensor setup successfull!" << endl;
 }
