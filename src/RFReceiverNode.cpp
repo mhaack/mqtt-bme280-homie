@@ -13,28 +13,21 @@ HomieSetting<const char *>
     channelMappingSetting("channels",
                           "Mapping of 433MHz signals to mqtt channels.");
 
-RFReceiverNode::RFReceiverNode(const char *name)
-    : HomieNode(name, "RFReceiver") {
+RFReceiverNode::RFReceiverNode(const char *name, RCSwitch &rcSwitch)
+    : HomieNode(name, "RFReceiver"), rcSwitch(rcSwitch) {
   advertise("channel-0");
-  mySwitch = RCSwitch();
 }
 
 void RFReceiverNode::setup() {
-  // init RF library
-  mySwitch.enableTransmit(15); // RF Transmitter is connected to Pin D8
-  mySwitch.setRepeatTransmit(
-      20); // increase transmit repeat to avoid lost of rf sendings
-  mySwitch.enableReceive(13); // Receiver on pin D7
-
   Homie.getLogger() << "RFReceiverNode channel config = "
                     << channelMappingSetting.get() << endl;
   Homie.getLogger() << "RFReceiverNode successfull initialized" << endl;
 }
 
 void RFReceiverNode::loop() {
-  if (mySwitch.available()) {
-    long data = mySwitch.getReceivedValue();
-    mySwitch.resetAvailable();
+  if (rcSwitch.available()) {
+    long data = rcSwitch.getReceivedValue();
+    rcSwitch.resetAvailable();
     Homie.getLogger() << "Receiving 433Mhz > MQTT signal: " << data << endl;
 
     String currentCode = String(data);

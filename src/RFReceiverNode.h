@@ -14,7 +14,12 @@
 class RFReceiverNode : public HomieNode {
 
 public:
-  RFReceiverNode(const char *name);
+  RFReceiverNode(const char *name, RCSwitch &rcSwitch);
+
+  struct RFReceiverEvent {
+    String data;
+    unsigned long timeStamp;
+  };
 
 protected:
   virtual void setup() override;
@@ -22,7 +27,7 @@ protected:
 
 private:
   String getChannelByCode(const String &currentCode);
-  RCSwitch mySwitch;
+  RCSwitch &rcSwitch;
 };
 
 #endif /* SRC_RFRECEIVERNODE_H_ */

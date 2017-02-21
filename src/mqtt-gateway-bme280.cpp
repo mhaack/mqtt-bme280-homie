@@ -14,13 +14,17 @@
 #include "BME280Node.h"
 #include "DisplayNode.h"
 #include "RFReceiverNode.h"
+#include "RFTransmitterNode.h"
 #include "images.h"
 
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
 
+RCSwitch mySwitch = RCSwitch();
+
 BME280Node bme280Node("bme280Outdoor");
-RFReceiverNode rfReceiverNode("rfRxOutdoor");
+RFReceiverNode rfReceiverNode("rfRxOutdoor", mySwitch);
+RFTransmitterNode rfTransmitterNode("rfTxOutdoor", mySwitch);
 SSD1306Wire display(0x3c, D2, D1);
 OLEDDisplayUi ui(&display);
 DisplayNode displayNode("displayOutdoor", display, ui, timeClient);
@@ -40,6 +44,11 @@ void loopHandler() { timeClient.update(); }
 void setup() {
   Serial.begin(115200);
   Serial << endl << endl;
+
+  // init RF library
+  mySwitch.enableTransmit(15);    // RF Transmitter on pin D8
+  mySwitch.setRepeatTransmit(20); // increase transmit repeat
+  mySwitch.enableReceive(13);     // RF Receiver on pin D7
 
   Homie_setFirmware("mqtt-gateway-outdoor", "1.0.0");
   Homie.disableResetTrigger();
