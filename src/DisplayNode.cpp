@@ -21,7 +21,6 @@ DisplayNode::DisplayNode(const char *name, SSD1306Wire &display,
       timeClient(timeClient), statusEnabled(false) {}
 
 void DisplayNode::setup() {
-
   // init dispaly
   ui.setTargetFPS(60);
   ui.setActiveSymbol(emptySymbol);
