@@ -95,7 +95,7 @@ void drawPressureFrame(OLEDDisplay *display, OLEDDisplayUiState *state, int16_t 
   display->drawString(x + 50, y + 25,String(bme280Node.getPressure(), 0) + " hPa");
 }
 
-void drawMQTTFrame(OLEDDisplay *display, OLEDDisplayUiState *state, int16_t x,∏int16_t y) {
+void drawMQTTFrame(OLEDDisplay *display, OLEDDisplayUiState *state, int16_t x, int16_t y) {
   display->setFont(ArialMT_Plain_10);
   display->setTextAlignment(TEXT_ALIGN_CENTER);
   display->drawString(x + 64, y + 0, "MQTT");
