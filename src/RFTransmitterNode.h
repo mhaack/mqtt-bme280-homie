@@ -15,7 +15,8 @@ class RFTransmitterNode : public HomieNode {
 
 public:
   RFTransmitterNode(const char *name, RCSwitch &rcSwitch);
-
+  String getLastEvent();
+  
 protected:
   virtual bool handleInput(const String &property, const HomieRange &range,
                            const String &value) override;
