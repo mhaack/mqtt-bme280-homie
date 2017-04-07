@@ -8,7 +8,7 @@ cache:
         - "~/.platformio"
 
 env:
-     - PLATFORMIO_CI_SRC=src/mqtt-gateway-bme280.cpp
+     - PLATFORMIO_CI_SRC=src
 
 install:
     - pip install -U platformio
