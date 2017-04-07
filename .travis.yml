@@ -16,8 +16,7 @@ install:
     - wget https://github.com/marvinroger/homie-esp8266/archive/develop.zip -O /tmp/homie2.zip
     - unzip /tmp/homie2.zip -d /tmp
 
-    - platformio lib install "ArduinoJson" "AsyncMqttClient" "Bounce2" "Adafruit Unified Sensor" "Adafruit BME280 Library" "ESP8266_SSD1306" "NTPClient"
-    - platformio lib update
+    - platformio lib -g install "ArduinoJson" "AsyncMqttClient" "Bounce2" "Adafruit Unified Sensor" "Adafruit BME280 Library" "ESP8266_SSD1306" "NTPClient"
 
 script:
     - platformio ci --lib="/tmp/homie-esp8266-develop" --board=nodemcuv2
