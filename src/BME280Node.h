@@ -17,26 +17,26 @@
 #include <HomieNode.hpp>
 
 class BME280Node : public HomieNode {
-private:
-  unsigned long lastMeasurement;
+  private:
+    unsigned long lastMeasurement;
 
-  Adafruit_BME280 bme;
+    Adafruit_BME280 bme;
 
-public:
-  BME280Node(const char *name);
+  public:
+    BME280Node(const char *name);
 
-  float getHumidity() const { return humidity; }
-  float getTemperature() const { return temperature; }
-  float getPressure() const { return pressure; }
+    float getHumidity() const { return humidity; }
+    float getTemperature() const { return temperature; }
+    float getPressure() const { return pressure; }
 
-protected:
-  virtual void setup() override;
-  virtual void loop() override;
+  protected:
+    virtual void setup() override;
+    virtual void loop() override;
 
-private:
-  float temperature = NAN;
-  float humidity = NAN;
-  float pressure = NAN;
+  private:
+    float temperature = NAN;
+    float humidity = NAN;
+    float pressure = NAN;
 };
 
 #endif

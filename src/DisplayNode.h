@@ -16,31 +16,29 @@
 #include <SSD1306.h>
 
 class DisplayNode : public HomieNode {
-public:
-  DisplayNode(const char *name, SSD1306Wire &display, OLEDDisplayUi &ui,
-              NTPClient &timeClient);
+  public:
+    DisplayNode(const char *name, SSD1306Wire &display, OLEDDisplayUi &ui, NTPClient &timeClient);
 
-  void addFrame(FrameCallback frame, uint8_t index);
-  void setFrameCount(uint8_t count) { frameCount = count; }
-  void enableStatusFrame(bool enabled) { statusEnabled = enabled; }
-  void Event(HomieEvent event);
+    void addFrame(FrameCallback frame, uint8_t index);
+    void setFrameCount(uint8_t count) { frameCount = count; }
+    void enableStatusFrame(bool enabled) { statusEnabled = enabled; }
+    void Event(HomieEvent event);
 
-protected:
-  virtual void setup() override;
-  virtual void loop() override;
+  protected:
+    virtual void setup() override;
+    virtual void loop() override;
 
-private:
-  SSD1306Wire display;
-  OLEDDisplayUi ui;
-  NTPClient &timeClient;
-  FrameCallback frames[7];
-  OverlayCallback overlays[1];
-  int frameCount;
-  bool statusEnabled;
+  private:
+    SSD1306Wire display;
+    OLEDDisplayUi ui;
+    NTPClient &timeClient;
+    FrameCallback frames[7];
+    OverlayCallback overlays[1];
+    int frameCount;
+    bool statusEnabled;
 
-  static void drawOverlay(OLEDDisplay *display, OLEDDisplayUiState *state);
-  static void drawStatusFrame(OLEDDisplay *display, OLEDDisplayUiState *state,
-                              int16_t x, int16_t y);
+    static void drawOverlay(OLEDDisplay *display, OLEDDisplayUiState *state);
+    static void drawStatusFrame(OLEDDisplay *display, OLEDDisplayUiState *state, int16_t x, int16_t y);
 };
 
 #endif
