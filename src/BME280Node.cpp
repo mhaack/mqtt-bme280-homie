@@ -12,39 +12,54 @@
 HomieSetting<long> sensorIntervalSetting("sensorInterval", "The sensor reading interval in seconds");
 HomieSetting<double> temperatureOffsetSetting("temperatureOffset", "The temperature offset in degrees");
 
-BME280Node::BME280Node(const char *name) : HomieNode(name, "BME280Sensor"), lastMeasurement(0) {
-    advertise("temperature");
-    advertise("humidity");
-    advertise("pressure");
-}
+BME280Node::BME280Node(const char *name) : HomieNode(name, "BME280Sensor"), _lastMeasurement(0) {}
 
 void BME280Node::setup() {
-    if (!bme.begin()) {
-        Homie.getLogger() << "Could not find a valid BME280 sensor, check wiring!" << endl;
-        while (1)
-            ;
+    advertise("temperature");
+    advertise("temperature/unit");
+    advertise("humidity");
+    advertise("humidity/unit");
+    advertise("pressure");
+    advertise("pressure/unit");
+
+    _measurementInterval = sensorIntervalSetting.get();
+    _temperatureOffset = temperatureOffsetSetting.get();
+
+    if (bme.begin()) {
+        _sensorFound = true;
+        Homie.getLogger() << "BME280 sensor found" << endl
+                          << "Reading interval: " << _measurementInterval << " s" << endl
+                          << "Temperature offset: " << _temperatureOffset << " °C" << endl;
+    } else {
+        _sensorFound = false;
+        Homie.getLogger() << "BME280 sensor not found. Check wiring!" << endl;
     }
-    Homie.getLogger() << "BME280 sensor reading interval = " << sensorIntervalSetting.get() << endl;
-    Homie.getLogger() << "BME280 temperature offset = " << temperatureOffsetSetting.get() << endl;
-    Homie.getLogger() << "BME280 sensor setup successfull!" << endl;
 }
 
+void BME280Node::setupHandler() {
+    setProperty("temperature/unit").send("°C");
+    setProperty("humidity/unit").send("%");
+    setProperty("pressure/unit").send("hPa");
+};
+
 void BME280Node::loop() {
-    if (millis() - lastMeasurement >= sensorIntervalSetting.get() * 1000UL || lastMeasurement == 0) {
-        temperature = bme.readTemperature();
-        humidity = bme.readHumidity();
-        pressure = bme.readPressure() / 100.0F;
+    if (_sensorFound) {
+        if (millis() - _lastMeasurement >= _measurementInterval * 1000UL || _lastMeasurement == 0) {
+            temperature = bme.readTemperature();
+            humidity = bme.readHumidity();
+            pressure = bme.readPressure() / 100.0F;
 
-        Homie.getLogger() << "Temperature: " << temperature << " °C" << endl;
-        temperature += temperatureOffsetSetting.get();
-        Homie.getLogger() << "Temperature (after offset): " << temperature << " °C" << endl;
-        Homie.getLogger() << "Humidity: " << temperature << " %" << endl;
-        Homie.getLogger() << "Pressure: " << pressure << " hPa" << endl;
+            Homie.getLogger() << "Temperature: " << temperature << " °C" << endl;
+            temperature += temperatureOffsetSetting.get();
+            Homie.getLogger() << "Temperature (after offset): " << temperature << " °C" << endl;
+            Homie.getLogger() << "Humidity: " << humidity << " %" << endl;
+            Homie.getLogger() << "Pressure: " << pressure << " hPa" << endl;
 
-        lastMeasurement = millis();
+            setProperty("temperature").send(String(temperature));
+            setProperty("humidity").send(String(humidity));
+            setProperty("pressure").send(String(pressure));
 
-        setProperty("temperature").send(String(temperature));
-        setProperty("humidity").send(String(humidity));
-        setProperty("pressure").send(String(pressure));
+            _lastMeasurement = millis();
+        }
     }
 }

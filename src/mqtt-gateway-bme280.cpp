@@ -33,6 +33,7 @@ void drawHumidityFrame(OLEDDisplay *display, OLEDDisplayUiState *state, int16_t 
 void drawPressureFrame(OLEDDisplay *display, OLEDDisplayUiState *state, int16_t x, int16_t y);
 
 void loopHandler() { timeClient.update(); }
+void setupHandler() { bme280Node.setupHandler(); }
 
 void setup() {
     Serial.begin(115200);
@@ -42,6 +43,7 @@ void setup() {
     Homie.disableResetTrigger();
     // Homie.disableLedFeedback();
     Homie.setLoggingPrinter(&Serial);
+    Homie.setSetupFunction(setupHandler);
     Homie.setLoopFunction(loopHandler);
     Homie.onEvent([](HomieEvent event) { displayNode.Event(event); });
 

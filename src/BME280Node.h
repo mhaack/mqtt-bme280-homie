@@ -18,12 +18,16 @@
 
 class BME280Node : public HomieNode {
   private:
-    unsigned long lastMeasurement;
+    bool _sensorFound = false;
+    unsigned long _measurementInterval = 300;
+    unsigned long _lastMeasurement;
+    float _temperatureOffset = 0.0f;
 
     Adafruit_BME280 bme;
 
   public:
     BME280Node(const char *name);
+    void setupHandler();
 
     float getHumidity() const { return humidity; }
     float getTemperature() const { return temperature; }
