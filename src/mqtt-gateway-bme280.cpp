@@ -45,10 +45,9 @@ void setup() {
     Homie.setLoopFunction(loopHandler);
     Homie.onEvent([](HomieEvent event) { displayNode.Event(event); });
 
-    displayNode.addFrame(drawTempFrame, 0);
-    displayNode.addFrame(drawHumidityFrame, 1);
-    displayNode.addFrame(drawPressureFrame, 2);
-    displayNode.setFrameCount(3);
+    displayNode.addFrame(drawTempFrame);
+    displayNode.addFrame(drawHumidityFrame);
+    displayNode.addFrame(drawPressureFrame);
     displayNode.enableStatusFrame(true);
 
     Homie.setup();

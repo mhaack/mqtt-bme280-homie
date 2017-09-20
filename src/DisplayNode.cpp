@@ -35,8 +35,7 @@ void DisplayNode::setup() {
 
     // Add frames
     if (statusEnabled) {
-        addFrame(DisplayNode::drawStatusFrame, frameCount);
-        frameCount++;
+        addFrame(DisplayNode::drawStatusFrame);
     }
     ui.setFrames(frames, frameCount);
 
@@ -53,12 +52,15 @@ void DisplayNode::setup() {
         display.flipScreenVertically();
     }
 
-    Homie.getLogger() << "OLED DisplayNode setup successfull!" << endl;
+    Homie.getLogger() << "OLED DisplayNode setup successful!" << endl;
 }
 
 void DisplayNode::loop() { ui.update(); }
 
-void DisplayNode::addFrame(FrameCallback frame, uint8_t index) { frames[index] = frame; }
+int DisplayNode::addFrame(FrameCallback frame) {
+    frames[frameCount++] = frame;
+    return frameCount;
+}
 
 void DisplayNode::Event(HomieEvent event) { homieEvent = event; }
 

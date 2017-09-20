@@ -16,11 +16,12 @@
 #include <SSD1306.h>
 
 class DisplayNode : public HomieNode {
+    static const int MAXFRAMES = 7;
+
   public:
     DisplayNode(const char *name, SSD1306Wire &display, OLEDDisplayUi &ui, NTPClient &timeClient);
 
-    void addFrame(FrameCallback frame, uint8_t index);
-    void setFrameCount(uint8_t count) { frameCount = count; }
+    int addFrame(FrameCallback frame);
     void enableStatusFrame(bool enabled) { statusEnabled = enabled; }
     void Event(HomieEvent event);
 
@@ -32,9 +33,9 @@ class DisplayNode : public HomieNode {
     SSD1306Wire display;
     OLEDDisplayUi ui;
     NTPClient &timeClient;
-    FrameCallback frames[7];
+    FrameCallback frames[MAXFRAMES];
     OverlayCallback overlays[1];
-    int frameCount;
+    int frameCount = 0;
     bool statusEnabled;
 
     static void drawOverlay(OLEDDisplay *display, OLEDDisplayUiState *state);
