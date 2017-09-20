@@ -4,3 +4,4 @@
 .gcc-flags.json
 lib/homie-esp8266-2.0
 data/homie
+.vscode
