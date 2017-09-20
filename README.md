@@ -1,6 +1,8 @@
 # Homie Sensor project with BME280  
 
-[![Build Status](https://travis-ci.org/mhaack/mqtt-bme280-homie.svg?branch=master)](https://travis-ci.org/mhaack/mqtt-bme280-homie)
+[![Build Status](https://img.shields.io/travis/mhaack/mqtt-bme280-homie.svg?style=flat-square)](https://travis-ci.org/mhaack/mqtt-bme280-homie)
+[![GitHub release](https://img.shields.io/github/release/mhaack/mqtt-bme280-homie.svg?style=flat-square)]()
+(https://github.com/mhaack/mqtt-bme280-homie/releases)
 
 The mqtt-bme280-homie project is a small and easy to integrate temperature, air pressure and humidity monitoring solution with an extra SSD1306 OLED display. Sensor data is send via MQTT and displayed on the small screen. Local time is loaded via NTP. The project is built with a cost-effective ESP8266 WiFi chip (I used a NodeMCU from ebay, Wemos D1 mini will do as well).
 
@@ -14,7 +16,7 @@ The software is based on [Homie](https://github.com/marvinroger/homie-esp8266) t
 - USB power supply and cable
 - Enclosure
 
-I got the BME280 breakout form [Adafruit](https://www.adafruit.com/product/2652), others will do as well. The SSD1306 OLED displays I ordered at Aliexpress. This  [enclosure](https://www.amazon.de/gp/product/B00PZYMLJ4) to hold all together.
+I got the BME280 breakout form [Adafruit](https://www.adafruit.com/product/2652), others will do as well. The SSD1306 OLED displays I ordered at Aliexpress. This [enclosure](https://www.amazon.de/gp/product/B00PZYMLJ4) keeps everything together.
 
 ## Software
 
@@ -35,3 +37,4 @@ Parameter           | Type        | Usage
 ------------------- | ----------- | -------
 sensorInterval      | long        | temperature reading interval in seconds
 temperatureOffset   | double      | temperature offset (-/+) to correct the sensor reading, for example if used in enclosure box
+flipScreen          | bool        | filp the display screen vertically
