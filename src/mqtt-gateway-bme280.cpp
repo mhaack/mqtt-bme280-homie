@@ -1,7 +1,7 @@
 /*
  * mqtt-gateway-bme280.cpp
  *
- * Version: 1..10
+ * Version: 1.1.0
  * Author: Markus Haack (http://github.com/mhaack)
  */
 
