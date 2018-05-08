@@ -20,4 +20,6 @@ jobs:
           name: Build Application
           command: |
             platformio ci
+          environment:
+            PLATFORMIO_CI_SRC: src
      
