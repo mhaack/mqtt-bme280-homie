@@ -19,12 +19,7 @@ jobs:
       - run:
           name: Build Application
           command: |
-            platformio ci --keep-build-dir --verbose --project-conf platformio.ini
-            ls -Rta ~/repo
-            echo 'MH TEST 1'
-            ls -Rta $BASH_ENV
-            echo 'MH TEST 2'
-            ls -Rta $CIRCLE_SHELL_ENV
+            platformio ci --project-conf platformio.ini
           environment:
             PLATFORMIO_CI_SRC: src
       - store_artifacts:
