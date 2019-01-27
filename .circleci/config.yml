@@ -22,4 +22,6 @@ jobs:
             platformio ci --project-conf platformio.ini
           environment:
             PLATFORMIO_CI_SRC: src
+      - store_artifacts:
+          path: .pioenvs/nodemcuv2/firmware.bin
      
