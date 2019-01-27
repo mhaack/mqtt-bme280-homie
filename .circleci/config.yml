@@ -10,7 +10,7 @@ jobs:
       - checkout
 
       - run:
-          name: install dependencies
+          name: Install Dependencies
           command: |
             python --version
             pip install -q platformio --user
