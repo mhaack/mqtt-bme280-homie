@@ -20,6 +20,10 @@ jobs:
           name: Build Application
           command: |
             platformio ci --project-conf platformio.ini
+            echo 'MH TEST 1'
+            ls -Rta $PROJECT_HASH
+            echo 'MH TEST 2'
+            ls -Rta /tmp/pio-build/$PROJECT_HASH
           environment:
             PLATFORMIO_CI_SRC: src
       - store_artifacts:
