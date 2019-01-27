@@ -19,7 +19,7 @@ jobs:
       - run:
           name: Build Application
           command: |
-            platformio ci --project-conf platformio.ini
+            platformio ci --keep-build-dir --project-conf platformio.ini
             ls -Rta ~/repo
           environment:
             PLATFORMIO_CI_SRC: src
