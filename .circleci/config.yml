@@ -20,7 +20,7 @@ jobs:
           name: Build Application
           command: |
             platformio ci --project-conf platformio.ini
-            ls -l ~/repo
+            ls -Rta ~/repo
           environment:
             PLATFORMIO_CI_SRC: src
       - store_artifacts:
