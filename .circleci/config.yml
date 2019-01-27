@@ -21,8 +21,10 @@ jobs:
           command: |
             platformio ci --keep-build-dir --verbose --project-conf platformio.ini
             ls -Rta ~/repo
-            echo $TMPDIR
-            ls -Rta $TMPDIR
+            echo 'MH TEST 1'
+            ls -Rta $BASH_ENV
+            echo 'MH TEST 2'
+            ls -Rta $CIRCLE_SHELL_ENV
           environment:
             PLATFORMIO_CI_SRC: src
       - store_artifacts:
