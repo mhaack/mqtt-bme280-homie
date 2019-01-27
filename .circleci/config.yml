@@ -10,7 +10,7 @@ jobs:
       - checkout
 
       - run:
-          name: install dependencies
+          name: Install Dependencies
           command: |
             python --version
             pip install -q platformio --user
@@ -20,6 +20,7 @@ jobs:
           name: Build Application
           command: |
             platformio ci --project-conf platformio.ini
+            ls -l ~/repo
           environment:
             PLATFORMIO_CI_SRC: src
       - store_artifacts:
